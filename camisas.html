@@ -1,42 +1,99 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camisas Vintage - Zuki Vintage Fashion</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zuki Vintage Fashion - Galería</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>
-        <h1>Zuki Vintage Fashion</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="vestidos.html">Vestidos</a></li>
-                <li><a href="pantalones.html">Pantalones</a></li>
-                <li><a href="calzado.html">Calzado</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1 id="titulo">Zuki Vintage Fashion</h1>
+    <nav>
+      <ul>
+        <li><a href="calzado.html">Calzado</a></li>
+        <li><a href="vestidos.html">Vestidos</a></li>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="pantalones.html">Pantalones</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <main class="categoria-productos">
-        <h2>Camisas Vintage</h2>
-        <div class="grid-productos">
-            <div class="producto-card">
-                <img src="imagenes/camisa1_modelo.jpg" alt="Camisa de rayas vintage">
-                <h3>Camisa de Rayas Retro</h3>
-                <p class="precio">25.00 €</p>
-            </div>
-            <div class="producto-card">
-                <img src="imagenes/camisa2_modelo.jpg" alt="Blusa de seda años 50">
-                <h3>Blusa de Seda Vintage</h3>
-                <p class="precio">40.00 €</p>
-            </div>
-            </div>
-    </main>
+  <main class="home">
+    <section class="categorias-principales">
+      <h2> Camisetas </h2>
+      <div class="tarjetas-contenedor"></div>
+    </section>
+  </main>
 
-    <footer>
-        <p>&copy; 2025 Zuki Vintage Fashion - Todos los derechos reservados.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2025 Zuki Vintage Fashion - Todos los derechos reservados.</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbX7NsmuwNstzf0qDuq_phBDPJLyw1314",
+      authDomain: "zuki-79aed.firebaseapp.com",
+      projectId: "zuki-79aed",
+      storageBucket: "zuki-79aed.appspot.com",
+      messagingSenderId: "927982078677",
+      appId: "1:927982078677:web:22fdc56cdc899974a3b05c"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function cargarProductos() {
+      const querySnapshot = await getDocs(collection(db, "productos"));
+      const contenedor = document.querySelector(".tarjetas-contenedor");
+      contenedor.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const p = doc.data();
+        if (
+  /(^|\/)1\.jpg$/.test(p.Imagen) ||
+  /(^|\/)2\.jpg$/.test(p.Imagen) ||
+  /(^|\/)3\.jpg$/.test(p.Imagen)
+) {
+          const tarjetaHTML = `
+          <div class="container page-wrapper">
+            <div class="page-inner">
+              <div class="row">
+                <div class="el-wrapper">
+                  <div class="box-up">
+                    <img class="img" src="${p.Imagen}" alt="${p.Nombre}">
+                    <div class="img-info">
+                      <div class="info-inner">
+                        <h4>${p.Nombre}</h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box-down">
+                    <div class="h-bg"><div class="h-bg-inner"></div></div>
+                    <a class="cart" href="#">
+                      <span class="price">${p.Precio}</span>
+                      <span class="add-to-cart">
+                        <span class="txt">Comprar</span>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+          contenedor.innerHTML += tarjetaHTML;
+        }
+      });
+    }
+
+    cargarProductos();
+  </script>
 </body>
 </html>
