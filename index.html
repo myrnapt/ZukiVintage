@@ -9,14 +9,20 @@
   <body>
     <header>
       <h1 id="titulo">Zuki Vintage Fashion</h1>
-      <nav>
-        <ul>
+      <nav class="barra-navegacion">
+        <ul class="menu-central">
           <li><a href="calzado.html">Calzado</a></li>
           <li><a href="vestidos.html">Vestidos</a></li>
           <li><a href="camisas.html">Camisas</a></li>
           <li><a href="pantalones.html">Pantalones</a></li>
         </ul>
+        <div class="carrito">
+          <a href="#">
+            🛒 <span id="contador-carrito">0</span>
+          </a>
+        </div>
       </nav>
+      
     </header>
 
     <section class="hero">
@@ -97,6 +103,16 @@
       }
 
       cargarProductos();
+      let contador = 0;
+
+document.addEventListener("click", function (e) {
+  if (e.target.closest(".cart")) {
+    e.preventDefault();
+    contador++;
+    document.getElementById("contador-carrito").textContent = contador;
+  }
+});
+
     </script>
   </body>
 </html>
